@@ -116,114 +116,183 @@ Create realistic reproduction steps and analyze the potential impact. Consider w
 function generateEnhancedTestCase(summary: string): TestCaseGenerationResult {
   const lowerSummary = summary.toLowerCase()
 
-  // Determine category and priority based on keywords
+  // Determine category and priority based on your kiosk system keywords
   let category = "Functional"
   let priority: TestCaseGenerationResult["priority"] = "Medium"
 
-  if (lowerSummary.includes("payment") || lowerSummary.includes("transaction") || lowerSummary.includes("money")) {
-    category = "Payment"
+  // Login related tests
+  if (lowerSummary.includes("login") || lowerSummary.includes("password") || lowerSummary.includes("authentication")) {
+    category = "Login"
     priority = "High"
-  } else if (
-    lowerSummary.includes("ui") ||
-    lowerSummary.includes("display") ||
-    lowerSummary.includes("screen") ||
-    lowerSummary.includes("button")
+  }
+  // Dashboard related tests
+  else if (
+    lowerSummary.includes("dashboard") ||
+    lowerSummary.includes("main screen") ||
+    lowerSummary.includes("home")
   ) {
-    category = "UI/UX"
+    category = "Dashboard"
     priority = "Medium"
-  } else if (lowerSummary.includes("security") || lowerSummary.includes("login") || lowerSummary.includes("auth")) {
+  }
+  // Cash Dispenser related tests
+  else if (
+    lowerSummary.includes("cash") ||
+    lowerSummary.includes("dispenser") ||
+    lowerSummary.includes("cassette") ||
+    lowerSummary.includes("bills")
+  ) {
+    category = "Cash Dispenser"
+    priority = "High"
+  }
+  // Tickets related tests
+  else if (lowerSummary.includes("ticket") || lowerSummary.includes("scan") || lowerSummary.includes("qr")) {
+    category = "Tickets"
+    priority = "Medium"
+  }
+  // Settings related tests
+  else if (
+    lowerSummary.includes("settings") ||
+    lowerSummary.includes("configuration") ||
+    lowerSummary.includes("terminal")
+  ) {
+    category = "Settings"
+    priority = "Medium"
+  }
+  // Machine Register related tests
+  else if (lowerSummary.includes("machine") || lowerSummary.includes("register") || lowerSummary.includes("sentry")) {
+    category = "Machine Register"
+    priority = "Medium"
+  }
+  // Daily Report related tests
+  else if (lowerSummary.includes("report") || lowerSummary.includes("daily") || lowerSummary.includes("email")) {
+    category = "Daily Report"
+    priority = "Low"
+  }
+  // Hardware related tests
+  else if (
+    lowerSummary.includes("hardware") ||
+    lowerSummary.includes("printer") ||
+    lowerSummary.includes("camera") ||
+    lowerSummary.includes("cdu")
+  ) {
+    category = "Hardware"
+    priority = "High"
+  }
+  // Security related tests
+  else if (lowerSummary.includes("security") || lowerSummary.includes("account") || lowerSummary.includes("user")) {
     category = "Security"
-    priority = "High"
-  } else if (lowerSummary.includes("performance") || lowerSummary.includes("speed") || lowerSummary.includes("load")) {
-    category = "Performance"
-    priority = "Medium"
-  } else if (lowerSummary.includes("api") || lowerSummary.includes("service") || lowerSummary.includes("integration")) {
-    category = "API"
-    priority = "High"
-  } else if (lowerSummary.includes("database") || lowerSummary.includes("data")) {
-    category = "Database"
     priority = "High"
   }
 
-  // Generate detailed steps based on category
+  // Generate detailed steps based on category and your kiosk system patterns
   let steps = ""
   let expected = ""
 
-  if (category === "Payment") {
-    steps = `1. Navigate to the payment section of the application
-2. Verify payment options are displayed correctly
-3. Select appropriate payment method for: ${summary}
-4. Enter valid payment information
-5. Proceed with payment processing
-6. Verify transaction completion
-7. Check receipt generation and email confirmation
-8. Validate payment status in user account`
-    expected = `Payment processing should complete successfully for ${summary} with proper confirmation, receipt generation, and account updates`
-  } else if (category === "UI/UX") {
-    steps = `1. Navigate to the relevant screen/component
-2. Verify initial UI state for: ${summary}
-3. Test all interactive elements (buttons, links, forms)
-4. Verify responsive design across different screen sizes
-5. Test accessibility features (keyboard navigation, screen readers)
-6. Validate visual consistency with design specifications
-7. Test user workflow and navigation paths
-8. Verify error states and user feedback`
-    expected = `UI elements should display correctly, be fully functional, and provide good user experience for ${summary}`
+  if (category === "Login") {
+    steps = `1. Launch the kiosk application
+2. Verify login page is displayed
+3. Test the specific login scenario: ${summary}
+4. Enter credentials as required
+5. Click "Login" button
+6. Observe system response
+7. Verify redirection or error handling
+8. Check session management`
+    expected = `Login functionality should work correctly for ${summary} with proper authentication, error handling, and user redirection to appropriate dashboard or error messages`
+  } else if (category === "Dashboard") {
+    steps = `1. Login to the admin system successfully
+2. Navigate to the Dashboard page
+3. Verify dashboard elements are loaded
+4. Test the specific dashboard feature: ${summary}
+5. Check all dashboard components (buttons, displays, status indicators)
+6. Verify data accuracy and real-time updates
+7. Test navigation to other modules
+8. Verify hardware status indicators`
+    expected = `Dashboard should display correctly for ${summary} with accurate data, functional buttons, proper hardware status indicators, and smooth navigation`
+  } else if (category === "Cash Dispenser") {
+    steps = `1. Login to admin system
+2. Navigate to Cash Dispenser module
+3. Verify cassette status and configuration
+4. Test the cash dispenser functionality: ${summary}
+5. Check cassette limits and bill counts
+6. Verify reject bin status
+7. Test deposit report functionality
+8. Check hardware communication`
+    expected = `Cash dispenser functionality should work correctly for ${summary} with proper cassette management, accurate bill counting, and reliable hardware communication`
+  } else if (category === "Tickets") {
+    steps = `1. Access the admin system
+2. Navigate to Tickets module
+3. Verify ticket scanning functionality
+4. Test the ticket feature: ${summary}
+5. Check ticket validation and processing
+6. Verify terminal ID filtering
+7. Test date range filtering
+8. Check ticket status updates`
+    expected = `Ticket functionality should work properly for ${summary} with accurate scanning, proper validation, and correct filtering options`
+  } else if (category === "Settings") {
+    steps = `1. Login to admin system
+2. Navigate to Settings module
+3. Access the relevant settings tab
+4. Test the settings functionality: ${summary}
+5. Modify configuration values as needed
+6. Save changes and verify persistence
+7. Test validation rules
+8. Verify system behavior after changes`
+    expected = `Settings functionality should work correctly for ${summary} with proper validation, data persistence, and immediate system updates`
+  } else if (category === "Machine Register") {
+    steps = `1. Access admin system
+2. Navigate to Machine Register module
+3. Test machine registration functionality: ${summary}
+4. Verify sentry integration options
+5. Test QR code scanning
+6. Check terminal name assignment
+7. Verify machine list updates
+8. Test clear functionality if applicable`
+    expected = `Machine registration should work properly for ${summary} with accurate QR scanning, proper sentry integration, and correct machine list management`
+  } else if (category === "Daily Report") {
+    steps = `1. Login to admin system
+2. Navigate to Daily Report module
+3. Verify report data display
+4. Test the report functionality: ${summary}
+5. Check data accuracy and completeness
+6. Test email functionality if applicable
+7. Verify date filtering
+8. Check report formatting`
+    expected = `Daily report functionality should work correctly for ${summary} with accurate data display, proper email delivery, and correct formatting`
+  } else if (category === "Hardware") {
+    steps = `1. Access admin system
+2. Check hardware status indicators
+3. Test the hardware functionality: ${summary}
+4. Verify device communication
+5. Check status indicators (green/red)
+6. Test device responses
+7. Verify error handling
+8. Check diagnostic information`
+    expected = `Hardware functionality should work properly for ${summary} with accurate status indicators, reliable communication, and proper error handling`
   } else if (category === "Security") {
-    steps = `1. Set up test environment with security monitoring
-2. Identify security-related functionality: ${summary}
-3. Test authentication and authorization mechanisms
-4. Attempt unauthorized access scenarios
-5. Verify data encryption and protection measures
-6. Test input validation and sanitization
-7. Check for security vulnerabilities (XSS, SQL injection, etc.)
-8. Validate security headers and configurations`
-    expected = `Security measures should properly protect against threats and ensure ${summary} meets security requirements`
-  } else if (category === "Performance") {
-    steps = `1. Set up performance monitoring tools
-2. Establish baseline performance metrics
-3. Execute performance test for: ${summary}
-4. Monitor response times and resource usage
-5. Test under various load conditions
-6. Identify performance bottlenecks
-7. Verify system stability under stress
-8. Document performance metrics and recommendations`
-    expected = `System should perform efficiently within acceptable limits for ${summary} under normal and peak load conditions`
-  } else if (category === "API") {
-    steps = `1. Set up API testing environment
-2. Verify API endpoint availability for: ${summary}
-3. Test API request/response formats
-4. Validate data integrity and structure
-5. Test error handling and status codes
-6. Verify authentication and authorization
-7. Test rate limiting and throttling
-8. Document API behavior and responses`
-    expected = `API should function correctly for ${summary} with proper data exchange, error handling, and security measures`
-  } else if (category === "Database") {
-    steps = `1. Set up database testing environment
-2. Verify database connectivity and access
-3. Test data operations related to: ${summary}
-4. Validate data integrity and constraints
-5. Test transaction handling and rollback
-6. Verify data security and access controls
-7. Test backup and recovery procedures
-8. Monitor database performance and optimization`
-    expected = `Database operations should work correctly for ${summary} with proper data integrity, security, and performance`
+    steps = `1. Access admin system
+2. Navigate to Security/Accounts settings
+3. Test the security feature: ${summary}
+4. Verify authentication mechanisms
+5. Test password policies
+6. Check user management functions
+7. Verify access controls
+8. Test security validations`
+    expected = `Security functionality should work correctly for ${summary} with proper authentication, secure password handling, and appropriate access controls`
   } else {
-    // Default functional test
-    steps = `1. Navigate to the relevant section of the application
-2. Verify initial state and prerequisites
-3. Execute the main functionality: ${summary}
-4. Test normal use case scenarios
-5. Test edge cases and boundary conditions
-6. Verify error handling and user feedback
-7. Test integration with other system components
-8. Validate final state and cleanup`
-    expected = `System should function correctly and meet all requirements for ${summary} with proper error handling and user feedback`
+    // Default functional test for kiosk system
+    steps = `1. Login to the kiosk admin system
+2. Navigate to the relevant module
+3. Verify initial state and prerequisites
+4. Execute the main functionality: ${summary}
+5. Test normal operation scenarios
+6. Verify data accuracy and system responses
+7. Test error handling and edge cases
+8. Check integration with other system components`
+    expected = `System should function correctly for ${summary} with proper data handling, accurate responses, and reliable integration with kiosk hardware and software components`
   }
 
   return {
-    scenario: `Verify that ${summary} works correctly and meets all functional requirements`,
+    scenario: `Verify that ${summary} works correctly in the kiosk admin system`,
     steps,
     expected,
     priority,
@@ -234,140 +303,150 @@ function generateEnhancedTestCase(summary: string): TestCaseGenerationResult {
 function generateEnhancedBugReport(summary: string): BugReportGenerationResult {
   const lowerSummary = summary.toLowerCase()
 
-  // Determine category, priority, and severity based on keywords
+  // Determine category, priority, and severity based on your kiosk system
   let category = "Functional"
   let priority: BugReportGenerationResult["priority"] = "Medium"
   let severity: BugReportGenerationResult["severity"] = "Major"
-  let environment = "Production Environment"
+  const environment = "Kiosk Admin System - Production Environment"
 
+  // Critical kiosk issues
   if (lowerSummary.includes("crash") || lowerSummary.includes("freeze") || lowerSummary.includes("hang")) {
     category = "Crash"
     priority = "Critical"
     severity = "Blocker"
-  } else if (
-    lowerSummary.includes("payment") ||
-    lowerSummary.includes("transaction") ||
-    lowerSummary.includes("money")
+  }
+  // Cash handling issues (highest priority for kiosk)
+  else if (
+    lowerSummary.includes("cash") ||
+    lowerSummary.includes("dispenser") ||
+    lowerSummary.includes("bills") ||
+    lowerSummary.includes("cassette")
   ) {
-    category = "Payment"
+    category = "Cash Handling"
     priority = "Critical"
     severity = "Critical"
-  } else if (
-    lowerSummary.includes("ui") ||
+  }
+  // Login/Authentication issues
+  else if (
+    lowerSummary.includes("login") ||
+    lowerSummary.includes("password") ||
+    lowerSummary.includes("authentication")
+  ) {
+    category = "Authentication"
+    priority = "High"
+    severity = "Major"
+  }
+  // Hardware communication issues
+  else if (
+    lowerSummary.includes("hardware") ||
+    lowerSummary.includes("printer") ||
+    lowerSummary.includes("camera") ||
+    lowerSummary.includes("cdu")
+  ) {
+    category = "Hardware"
+    priority = "High"
+    severity = "Major"
+  }
+  // UI/Display issues
+  else if (
     lowerSummary.includes("display") ||
-    lowerSummary.includes("visual") ||
-    lowerSummary.includes("layout")
+    lowerSummary.includes("screen") ||
+    lowerSummary.includes("button") ||
+    lowerSummary.includes("ui")
   ) {
     category = "UI"
     priority = "Medium"
     severity = "Major"
-  } else if (
-    lowerSummary.includes("performance") ||
-    lowerSummary.includes("slow") ||
-    lowerSummary.includes("timeout")
-  ) {
-    category = "Performance"
-    priority = "High"
-    severity = "Major"
-  } else if (
-    lowerSummary.includes("security") ||
-    lowerSummary.includes("unauthorized") ||
-    lowerSummary.includes("breach")
-  ) {
-    category = "Security"
-    priority = "Critical"
-    severity = "Critical"
-  } else if (
-    lowerSummary.includes("data") ||
-    lowerSummary.includes("database") ||
-    lowerSummary.includes("corruption")
-  ) {
+  }
+  // Data/Report issues
+  else if (lowerSummary.includes("data") || lowerSummary.includes("report") || lowerSummary.includes("calculation")) {
     category = "Data"
     priority = "High"
-    severity = "Critical"
-  } else if (lowerSummary.includes("network") || lowerSummary.includes("connection") || lowerSummary.includes("api")) {
-    category = "Network"
-    priority = "High"
+    severity = "Major"
+  }
+  // Settings/Configuration issues
+  else if (
+    lowerSummary.includes("settings") ||
+    lowerSummary.includes("configuration") ||
+    lowerSummary.includes("save")
+  ) {
+    category = "Configuration"
+    priority = "Medium"
     severity = "Major"
   }
 
-  // Select appropriate environment based on keywords
-  if (lowerSummary.includes("mobile") || lowerSummary.includes("ios") || lowerSummary.includes("android")) {
-    environment = "Mobile Application Environment"
-  } else if (lowerSummary.includes("web") || lowerSummary.includes("browser")) {
-    environment = "Web Browser Environment"
-  } else if (lowerSummary.includes("kiosk")) {
-    environment = "Kiosk Build 1.13.34_V_E450_prod"
-  }
-
-  // Generate detailed description and steps
+  // Generate detailed description and steps based on your kiosk system
   let description = ""
   let steps = ""
   let expected = ""
   let actual = ""
 
-  if (category === "Crash") {
-    description = `Critical system failure occurs when ${summary}. This results in application termination, potential data loss, and severe disruption to user workflow. The crash affects system stability and user confidence.`
-    steps = `1. Launch the application in a clean state
-2. Navigate to the relevant section
-3. Perform the action that triggers: ${summary}
-4. Observe application behavior and system response
-5. Note any error messages or logs before crash
-6. Attempt to reproduce the crash consistently
-7. Check system logs and crash dumps
-8. Verify data integrity after crash recovery`
-    expected = "Application should continue running normally without any crashes or unexpected terminations"
-    actual = "Application crashes unexpectedly, potentially causing data loss and disrupting user workflow"
-  } else if (category === "Payment") {
-    description = `Payment processing failure when ${summary}. This prevents users from completing transactions, directly impacts revenue, and affects customer satisfaction. The issue may involve payment gateway integration, validation logic, or transaction processing.`
-    steps = `1. Navigate to the payment section
-2. Select items/services for purchase
-3. Proceed to payment processing
-4. Attempt the specific scenario: ${summary}
-5. Observe payment processing behavior
-6. Check transaction status and confirmations
-7. Verify payment gateway responses
-8. Test with different payment methods if applicable`
-    expected = "Payment should be processed successfully with proper confirmation and receipt generation"
-    actual = "Payment processing fails, preventing transaction completion and potentially causing revenue loss"
-  } else if (category === "UI") {
-    description = `User interface malfunction when ${summary}. This affects user experience, usability, and may prevent users from completing their intended actions. The issue impacts visual presentation and user interaction.`
-    steps = `1. Navigate to the affected screen or component
-2. Observe the initial UI state
-3. Perform actions related to: ${summary}
-4. Note visual inconsistencies or malfunctions
-5. Test across different browsers/devices if applicable
-6. Verify responsive design behavior
-7. Check accessibility features
-8. Document visual evidence with screenshots`
+  if (category === "Cash Handling") {
+    description = `Critical cash handling malfunction when ${summary}. This directly impacts the core kiosk functionality, potentially causing financial discrepancies, customer dissatisfaction, and operational disruption. The issue affects cash dispensing accuracy and system reliability.`
+    steps = `1. Login to the kiosk admin system
+2. Navigate to Cash Dispenser module
+3. Verify cassette status and configuration
+4. Attempt the cash operation: ${summary}
+5. Monitor cassette behavior and bill counting
+6. Check reject bin status and error logs
+7. Verify deposit report accuracy
+8. Test hardware communication with CDU`
     expected =
-      "UI elements should display correctly, be properly aligned, and respond appropriately to user interactions"
-    actual = "UI elements are misaligned, missing, or not responding correctly to user interactions"
-  } else if (category === "Performance") {
-    description = `Performance degradation occurs when ${summary}. This results in slow response times, poor user experience, and potential system overload. The issue affects system efficiency and user satisfaction.`
-    steps = `1. Set up performance monitoring tools
-2. Establish baseline performance metrics
-3. Execute the scenario: ${summary}
-4. Monitor response times and resource usage
-5. Test under different load conditions
-6. Identify performance bottlenecks
-7. Compare with expected performance standards
-8. Document performance metrics and impact`
-    expected = "System should respond within acceptable time limits and maintain good performance"
-    actual = "System responds slowly, times out, or shows degraded performance affecting user experience"
+      "Cash dispensing should work accurately with proper bill counting, correct cassette management, and reliable hardware communication"
+    actual = "Cash handling fails, causing incorrect bill counts, cassette errors, or complete dispensing failure"
+  } else if (category === "Authentication") {
+    description = `Authentication system failure when ${summary}. This prevents authorized access to the admin system, blocking critical kiosk management operations and potentially causing security vulnerabilities.`
+    steps = `1. Launch the kiosk admin application
+2. Attempt to access login screen
+3. Try the authentication scenario: ${summary}
+4. Enter credentials as required
+5. Click login and observe response
+6. Check error messages and system behavior
+7. Verify session management
+8. Test different authentication methods if available`
+    expected =
+      "Authentication should work correctly with proper credential validation, secure session management, and appropriate error handling"
+    actual = "Authentication fails, preventing access to admin system or showing incorrect error messages"
+  } else if (category === "Hardware") {
+    description = `Hardware communication failure when ${summary}. This affects kiosk operation reliability, potentially causing service interruptions and preventing proper device monitoring and control.`
+    steps = `1. Access kiosk admin system
+2. Navigate to hardware status section
+3. Check device communication: ${summary}
+4. Monitor status indicators (green/red lights)
+5. Test device responses and commands
+6. Check diagnostic information
+7. Verify error reporting
+8. Test device reset functionality if available`
+    expected =
+      "Hardware should communicate properly with accurate status indicators, reliable device responses, and proper error reporting"
+    actual =
+      "Hardware communication fails, showing incorrect status, unresponsive devices, or missing diagnostic information"
+  } else if (category === "UI") {
+    description = `User interface malfunction when ${summary}. This affects admin usability, potentially preventing efficient kiosk management and causing operator confusion or errors.`
+    steps = `1. Login to kiosk admin system
+2. Navigate to the affected screen/module
+3. Perform the UI action: ${summary}
+4. Observe visual elements and responses
+5. Test button functionality and navigation
+6. Check data display accuracy
+7. Verify responsive behavior
+8. Test across different screen resolutions if applicable`
+    expected =
+      "UI elements should display correctly, respond appropriately to user interactions, and provide clear visual feedback"
+    actual = "UI elements are misaligned, unresponsive, or displaying incorrect information"
   } else {
-    // Default functional bug
-    description = `Functional issue occurs when ${summary}. This prevents the system from working as designed and affects user ability to complete their intended tasks. The issue impacts core functionality and user workflow.`
-    steps = `1. Navigate to the relevant section of the application
-2. Set up necessary preconditions
-3. Attempt to perform: ${summary}
-4. Observe system behavior and responses
-5. Note any error messages or unexpected results
-6. Try alternative approaches or workarounds
+    // Default kiosk system bug
+    description = `Functional issue occurs when ${summary}. This affects kiosk admin system operation, potentially disrupting management workflows and impacting service quality.`
+    steps = `1. Login to kiosk admin system
+2. Navigate to the relevant module
+3. Set up necessary preconditions
+4. Attempt to perform: ${summary}
+5. Observe system behavior and responses
+6. Check for error messages or unexpected results
 7. Test related functionality for side effects
-8. Document the complete failure scenario`
-    expected = "System should function correctly according to specifications and user expectations"
-    actual = "System does not work as expected, preventing users from completing their intended actions"
+8. Verify data integrity and system state`
+    expected = "System should function correctly according to kiosk admin specifications and operational requirements"
+    actual = "System does not work as expected, preventing proper kiosk management operations"
   }
 
   return {
