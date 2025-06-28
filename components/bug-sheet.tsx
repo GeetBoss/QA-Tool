@@ -601,12 +601,6 @@ export function BugSheet() {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-blue-600">{bugs.filter((bug) => bug.aiGenerated).length}</div>
-            <div className="text-xs text-muted-foreground">AI Generated</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
             <div className="text-2xl font-bold text-red-600">{bugs.filter((bug) => bug.status === "Open").length}</div>
             <div className="text-xs text-muted-foreground">Open</div>
           </CardContent>
@@ -621,6 +615,14 @@ export function BugSheet() {
         </Card>
         <Card>
           <CardContent className="p-4">
+            <div className="text-2xl font-bold text-gray-600">
+              {bugs.filter((bug) => bug.status === "Reopened").length}
+            </div>
+            <div className="text-xs text-muted-foreground">Reopened</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
             <div className="text-2xl font-bold text-green-600">
               {bugs.filter((bug) => bug.status === "Resolved").length}
             </div>
@@ -630,9 +632,9 @@ export function BugSheet() {
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-orange-600">
-              {bugs.filter((bug) => bug.priority === "Critical" || bug.priority === "High").length}
+              {bugs.filter((bug) => bug.status === "Closed").length}
             </div>
-            <div className="text-xs text-muted-foreground">High Priority</div>
+            <div className="text-xs text-muted-foreground">Closed</div>
           </CardContent>
         </Card>
       </div>
